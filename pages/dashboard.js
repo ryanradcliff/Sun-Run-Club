@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [amount, setAmount] = useState('');
   const [targetId, setTargetId] = useState('');
   const [history, setHistory] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const getSession = async () => {
@@ -44,10 +45,13 @@ export default function Dashboard() {
 
   const handleAddPlayer = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.from('players').insert([{ name }]);
+    setError('');
+    const { error } = await supabase.from('players').insert([{ name, balance: 0 }]);
     if (!error) {
       setName('');
       loadPlayers();
+    } else {
+      setError(error.message);
     }
   };
 
@@ -99,6 +103,7 @@ export default function Dashboard() {
           required
         />
         <button className="bg-green-600 text-white px-4 py-2 rounded">Add</button>
+        {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
       </form>
 
       <form onSubmit={handleDeposit} className="mb-6">
