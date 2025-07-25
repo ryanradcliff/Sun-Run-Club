@@ -1,0 +1,1 @@
+// supabase admin setup placeholder
